@@ -1,5 +1,6 @@
 
 import pandas as pd
+from src.NNclassifier import NNclassifier
 
 #data is a dict
 data = {
@@ -11,5 +12,7 @@ data = {
 }
 
 df = pd.DataFrame(data)
+
+
 
 
