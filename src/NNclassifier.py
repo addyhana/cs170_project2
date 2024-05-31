@@ -14,50 +14,129 @@ class NNclassifier:
     #def train(self, training_data):
         #self.set_train(training_data)
 
-    def test(self, feature_column, test_instance):
+    #def test(self, feature_column, test_instance):
         #test_instance is a dict --> {class:[feature, value]}
         #compare test instance with every value in the column
-        print('hi')
-       
+
+    def euclideanDistance(self, test_set, train_set):
+        test_array = np.array(test_set)
+        train_array = np.array(train_set)
+
+        return np.sqrt(np.sum((test_array - train_array) ** 2))
+    
+    def train(self, df, feature_set, leave_out_index):
+        #euclidean_distances = {}
+        class1 = []
+        class2 = []
+        
+        #print("training")
+        #normalized_df = src.util.normalize_vals(df)
+        #print(normalized_df)
+
+        #test_columns = normalized_df.loc[:,feature_set]
+        #print(test_columns)
+
+        test_list = []
+        for values in df.iterrows():
+            curr_index = values[0]
+            if curr_index == leave_out_index:
+                #create your test set 
+                for i in range(1, len(feature_set)):
+                    test_list.append(values[1][i])
+
+        
+        #print(test_list)
+
+        for values in df.iterrows():
+            curr_index = values[0]
+            
+            if curr_index != leave_out_index:
+                #create your train set
+                train_set = [] 
+                for i in range(1, len(feature_set)):
+                    #print(values[1][i])
+                    train_set.append(values[1][i])
+                #print(train_set)
+                feature_val = df.at[curr_index, 'Feature']
+                #euclidean_distances[feature_val] = self.euclideanDistance(test_list, train_set)
+                #euc_dist[class] = euc dist val
+                if feature_val == 1.0:
+                    class1.append(self.euclideanDistance(test_list, train_set))
+                elif feature_val == 2.0:
+                    class2.append(self.euclideanDistance(test_list, train_set))
+
+        
+        min_dist_class1 = min(class1)
+        min_dist_class2 = min(class2)
+
+        if min_dist_class1 < min_dist_class2:
+            return 1.0
+        elif min_dist_class2 < min_dist_class1:
+            return 2.0
+
+
+    def test(self, feature_set, df):
+        print("we do be testin tho")
+        correct = 0
+        data_count = 0
+
+        #function train- takes in feature set, index of leave one out, returns class 1 or class 2
+
+        normalized_df = src.util.normalize_vals(df)
+        #print(normalized_df)
+        test_columns = normalized_df.loc[:,feature_set]
+
+        #result = self.train(df, ["Feature",1,2], 0)
+        #print(result)
+
+        for values in test_columns.iterrows():
+            data_count += 1
+            curr_index = values[0]
+            #print(curr_index)
+            predicted_label = self.train(df, feature_set, curr_index)
+            true_label = test_columns.at[curr_index, 'Feature']
+
+            if predicted_label == true_label:
+                correct+= 1
+            
+        accuracy = correct / data_count
+        print(accuracy)
+
+        return accuracy
+
+
+
+            
+
+
+
 
 
         
-   #def test(self, test_instance):
-        #print("output predicted class label")
-
-    #def euclideanDistance(self, test_set, train_set):
-        #return np.sqrt(np.sum((test_set - train_set) ** 2))
-    
-    #only use features 3, 5, 7
 
 
-    #def test(self, df, feature):
-        #row_to_drop = -1
-        #norm_df = src.util.normalize_vals(df)
-        #print("entered test")
-        #features_df = norm_df.iloc[:,feature]
-        #leave out 1st row..test, 2nd row..test, 
 
-        #features_df_copy = features_df.copy()
-        #print(features_df_copy)
-        #print(features_df_copy)
+                
+
+
+
+            
+            
+
+            
+            
+                
+                
+            
+
+
         
-        #dict --> {1: eudist1, eudist2, 2: eucdist 1, eucdist2}
-            #create a dict for each feature you have like that 
-            #find smallest value in each dict and then compare those values and find the smallest, map it to its parent and thats the class 
-
-        #print(len(feature_list[1:]))
-
-        #for row in features_df_copy.iterrows():
-            #row_to_drop = row_to_drop + 1
-            #temp_df = features_df_copy.drop(row_to_drop).loc[0:]
-            #in temp_df, we have our data set minus the row we wanted to leave out
-
-
-            #print(temp_df)
-            #break
 
     
+
+
+
+   
 
 
 

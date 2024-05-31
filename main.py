@@ -15,7 +15,7 @@ testing = NNclassifier()
 feat_list = [0, 3]
 
 
-features_df = df.iloc[:,1]
-new_df = src.util.normalize_vals(features_df)
-testing.test(new_df)
+#new_df = src.util.normalize_vals(df)
+testing.test(["Feature",3,5,7], df)
+
 
