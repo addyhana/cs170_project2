@@ -1,18 +1,33 @@
 
 import pandas as pd
-from src.NNclassifier import NNclassifier
+from sklearn.datasets import make_classification
+from search import greedyforward, greedybackward
 
-#data is a dict
-data = {
-    "Instance ID": [0, 1, 2, 3, 4],
-    "Class Label": [1, 2, 1, 1, 2],
-    "Feature1": [0.01, 0.01, 0.02, 0.03, 0.05],
-    "Feature3": [0.02, 0.01, 0.03, 0.02, 0.01],
-    "Feature7": [0.02, 0.03, 0.02, 0.02, 0.05]
-}
+def create_sample_data():
+    X, y = make_classification(n_samples=100, n_features=13, n_informative=5, n_redundant=2, random_state=50)
+    df = pd.DataFrame(X, columns=[f'Feature_{i}' for i in range(13)])
+    df['Revenue'] = y
+    return df
 
-df = pd.DataFrame(data)
+# backward
+df = create_sample_data()
+selected_features, maxAccuracies, removed_features = greedybackward(df)
 
+# Print the results
+print("Final selected features and their accuracies:")
+for i, (feature, accuracy) in enumerate(zip(removed_features, maxAccuracies)):
+    print(f"Step {i+1}: Feature {feature} removed to produce accuracy {accuracy * 100:.2f}%")
+print("\n")
+
+# forward
+df = create_sample_data()
+selected_features, maxAccuracies = greedyforward(df)
+
+# Print the results
+print("Final selected features and their accuracies:")
+for i, (feature, accuracy) in enumerate(zip(selected_features, maxAccuracies)):
+    print(f"Step {i+1}: Feature {feature} added to produce accuracy {accuracy * 100:.2f}%")
+print("\n")
 
 
 
