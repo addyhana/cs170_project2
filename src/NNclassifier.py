@@ -8,13 +8,11 @@ class NNclassifier:
         self.train_y = None
         self.features = features
 
-
     def euclidean_distance(self, test_point, train_points):
         distances = []
         for training_value in train_points:
             distances.append(np.sqrt(np.sum((test_point - training_value) ** 2)))
         return distances
-
 
     def train(self, training_data):
         self.train_x = training_data.iloc[:, self.features].values

@@ -1,6 +1,7 @@
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+from src.NNclassifier import NNclassifier
 
 def greedyforward(df, maxSelectedFeatures=100, k=7): 
 
@@ -13,26 +14,17 @@ def greedyforward(df, maxSelectedFeatures=100, k=7):
         maxAccuracy = 0
         maxIndex = -1
         
-        for j in range(df.shape[1] - 1):  # assuming last column is class
+        for j in range(1, df.shape[1]): # assuming FIRST FIRST column is class
             # Skipping features already selected
             if j in selected_features:
                 continue
-
             # add the j-th column to the current tuple 
             current_features = selected_features + [j]
-            X = df.iloc[:, current_features]
-            y = df.iloc[:, -1]
-            
-            # 20% of dataset is in test set
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-            # Create and train KNN classifier
-            knn_classifier = KNeighborsClassifier(n_neighbors=k)
-            knn_classifier.fit(X_train, y_train)
-            
-            # Make predictions on the test set
-            y_pred = knn_classifier.predict(X_test)
-            accuracy = accuracy_score(y_test, y_pred)
+            # Create NNclassifier instance with column names
+            testingNoSearch = NNclassifier(features=current_features)
+            accuracy = testingNoSearch.validate(df=df)
+
             print(f"Using feature(s) {current_features} with accuracy {accuracy * 100:.2f}")
             
             # If curr feature is the best, prepare to add to feature-tuple
@@ -58,7 +50,7 @@ def greedyforward(df, maxSelectedFeatures=100, k=7):
 def greedybackward(df, k=7):
 
     # Initialize storage arrays
-    selected_features = list(range(df.shape[1] - 1))  # Start with all features selected
+    selected_features = list(range(1, df.shape[1] - 1))  # Start with all features selected
     maxAccuracies = []
     removed_features = []
 
@@ -71,25 +63,15 @@ def greedybackward(df, k=7):
             # Create a list excluding the j-th feature
             remaining_features = [feat for feat in selected_features if feat != j]
             
-            X = df.iloc[:, remaining_features]
-            y = df.iloc[:, -1]
-            
-            # Split data into train and test sets
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+            # Create NNclassifier instance with column names
+            testingNoSearch = NNclassifier(features=remaining_features)
+            accuracy = testingNoSearch.validate(df=df)
 
-            # Create and train KNN classifier
-            knn_classifier = KNeighborsClassifier(n_neighbors=k)
-            knn_classifier.fit(X_train, y_train)
-            
-            # Make predictions on the test set
-            y_pred = knn_classifier.predict(X_test)
-            accuracy = accuracy_score(y_test, y_pred)
             print(f"Using feature(s) {remaining_features} with accuracy {accuracy * 100:.2f}")
             
             # If the current feature set has better accuracy, update maxAccuracy and worstIndex
             if accuracy > maxAccuracy:
                 maxAccuracy = accuracy
-            else:
                 worstIndex = j
 
         # If removing the worst feature decreases accuracy, terminate the loop
