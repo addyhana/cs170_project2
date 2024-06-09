@@ -1,7 +1,7 @@
 
 import pandas as pd
 from sklearn.datasets import make_classification
-from src.search import greedyforward, greedybackward
+from search import greedyforward, greedybackward
 
 def create_sample_data():
     X, y = make_classification(n_samples=100, n_features=13, n_informative=5, n_redundant=2, random_state=50)

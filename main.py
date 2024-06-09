@@ -2,6 +2,9 @@
 import src.util
 from src.NNclassifier import NNclassifier
 from src.search import greedyforward, greedybackward
+from sklearn.datasets import make_classification
+import pandas as pd
+
 
 src.util.menu()
 
@@ -24,4 +27,6 @@ src.util.menu()
 #testingNoSearch = NNclassifier(features=[3,5,7])
 #accuracy = testingNoSearch.validate(df=df)
 #print(accuracy)
+
+
 

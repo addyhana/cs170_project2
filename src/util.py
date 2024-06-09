@@ -33,19 +33,27 @@ def menu():
 
     
 
+    
+        
+
     if selected_algo == '1':
-        selected_features, max_accuracies = greedyforward(normalized_df)
-        outputSearch = NNclassifier(features=selected_features)
+
+        selected_features, maxAccuracies = greedyforward(df)
+        print("Final selected features and their accuracies:")
+        for i, (feature, accuracy) in enumerate(zip(selected_features, maxAccuracies)):
+            print(f"Step {i+1}: Feature {feature} added to produce accuracy {accuracy * 100:.2f}%")
+            print("\n")
+
+    elif selected_algo == '2':
+
+        selected_features, maxAccuracies, removed_features = greedybackward(normalized_df)
+        print("Final selected features and their accuracies:")
+        for i, (feature, accuracy) in enumerate(zip(removed_features, maxAccuracies)):
+            print(f"Step {i+1}: Feature {feature} removed to produce accuracy {accuracy * 100:.2f}%")
+            print("\n")
         
-
-    if selected_algo == '2':
-        selected_features, max_accuracies, removed_features = greedybackward(df)
-        outputSearch = NNclassifier(features=selected_features)
         
         
-
-
-
 
 
 
