@@ -2,14 +2,15 @@
 import pandas as pd
 from src.NNclassifier import NNclassifier
 import src.search
-from src.search import greedyforward, greedybackward
+from src.search import greedyforward, greedybackward, find_correlated_features
 
 def menu():
-    print("Welcome to Group 63's Feature Selection Algorithm")
+    print("Welcome to Group 62's Feature Selection Algorithm")
     file_to_test = input("Type in the name of the file to test: ")
     print("Type the number of the algorithm you want to run")
     print("1. Forward Selection")
     print("2. Backward Elimination")
+    print("3. Group 62's special algorithm")
     selected_algo = input("Enter number: ")
 
     if file_to_test == 'small-test-dataset.txt':
@@ -31,33 +32,27 @@ def menu():
 
     normalized_df = normalize_vals(df)
 
-    
-
-    
-        
+   
 
     if selected_algo == '1':
-
-        selected_features, maxAccuracies = greedyforward(df)
-        print("Final selected features and their accuracies:")
-        for i, (feature, accuracy) in enumerate(zip(selected_features, maxAccuracies)):
-            print(f"Step {i+1}: Feature {feature} added to produce accuracy {accuracy * 100:.2f}%")
-            print("\n")
+        selected_features, max_accuracies = greedyforward(normalized_df)
+        testingWSearch = NNclassifier(features=selected_features)
+        
+        
 
     elif selected_algo == '2':
 
-        selected_features, maxAccuracies, removed_features = greedybackward(normalized_df)
-        print("Final selected features and their accuracies:")
-        for i, (feature, accuracy) in enumerate(zip(removed_features, maxAccuracies)):
-            print(f"Step {i+1}: Feature {feature} removed to produce accuracy {accuracy * 100:.2f}%")
-            print("\n")
-        
-        
-        
+        selected_features, max_accuracies, removed_features = greedybackward(normalized_df)
+        testingWSearch = NNclassifier(features=selected_features)
 
 
+    else:
+        print("Running the special algorithm...")
+        selected_features, trace = find_correlated_features(df, 'Feature', len(normalized_df.columns) - 1, threshold_value=.05)
+        testingWSearch = NNclassifier(features=selected_features)
 
-    
+        
+        
 
 def smallDfLoader():
     labels = []

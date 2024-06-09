@@ -88,7 +88,29 @@ def greedybackward(df, k=7):
             break
         i += 1
 
-    return selected_features, maxAccuracies, removed_features     
+    return selected_features, maxAccuracies, removed_features   
+
+
+def find_correlated_features(df, target_variable, num_features, threshold_value):
+    #make the correlation matrix
+    corr_matrix = df.corr()
+
+    #compute the absolute correlation values with the target variable
+    abs_corr_with_target = corr_matrix[target_variable].apply(lambda x: abs(x))
+    abs_corr_with_target = abs_corr_with_target.drop(target_variable)
+
+    #find features with correlation above the specified threshold
+    selected_features = abs_corr_with_target[abs_corr_with_target > threshold_value].nlargest(num_features).index.tolist()
+
+    trace = [f"Selected Feature {index + 1}: {feature}" for index, feature in enumerate(selected_features)]
+
+    for index, feature in enumerate(selected_features):
+        print(f"Selected Feature {index + 1}: {feature} with correlation {abs_corr_with_target[feature]:.2f}")
+
+    return selected_features, trace
+
+
+
 
 
 
