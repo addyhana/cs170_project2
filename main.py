@@ -9,9 +9,9 @@ import pandas as pd
 
 src.util.menu()
 
-filename = "small-test-dataset.txt"
-df = src.util.smallDfLoader()
-normalized_df = normalize_vals(df)
+#filename = "small-test-dataset.txt"
+#df = src.util.smallDfLoader()
+#normalized_df = normalize_vals(df)
 #print("with greedy forward:")
 #selected_features, max_accuracies = greedyforward(df)
 #testingWSearch = NNclassifier(features=selected_features)
