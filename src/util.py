@@ -49,7 +49,7 @@ def menu():
     else:
         print("Running the special algorithm...")
         selected_features, trace = find_correlated_features(df, 'Feature', len(normalized_df.columns) - 1, threshold_value=.05)
-        testingWSearch = NNclassifier(features=selected_features)
+        #testingWSearch = NNclassifier(features=selected_features)
 
         
         
@@ -66,7 +66,7 @@ def smallDfLoader():
 
 def largeDfLoader():
     col_names = []
-    col_names.insert(0, "Label")
+    col_names.insert(0, "Feature")
     for i in range(1, 41):
         col_names.append(i)
     df = pd.read_csv("large-test-dataset.txt", sep='\s+', names=col_names)
@@ -74,7 +74,7 @@ def largeDfLoader():
 
 def smallDfCustomLoader():
     col_names = []
-    col_names.insert(0, "Label")
+    col_names.insert(0, "Feature")
     for i in range(1, 11):
         col_names.append(i)
     df = pd.read_csv("CS170_Spring_2024_Small_data__62.txt", sep='\s+', names=col_names)
@@ -82,7 +82,7 @@ def smallDfCustomLoader():
 
 def largeDfCustomLoader():
     col_names = []
-    col_names.insert(0, "Label")
+    col_names.insert(0, "Feature")
     for i in range(1, 41):
         col_names.append(i)
     df = pd.read_csv("CS170_Spring_2024_Large_data__62.txt", sep='\s+', names=col_names)
